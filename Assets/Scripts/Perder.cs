@@ -1,5 +1,5 @@
 using UnityEngine;
-
+//perder
 using UnityEngine.SceneManagement;
 
 public class Perder : MonoBehaviour

@@ -23,21 +23,16 @@ public class Jugador : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip clipFruta;
 
-     [Header("******* Animaciones *******")]
-    private Animator animator;
-
 
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
     }
 
     void Update()
     {
         
         rb2d.linearVelocity = new Vector2(movimientoX * velocidad, rb2d.linearVelocity.y);
-        animator.SetBool("Correr", movimientoX != 0);
 
     
     }
@@ -55,7 +50,6 @@ public class Jugador : MonoBehaviour
         if (movimientoX != 0)
         {
             transform.localScale = new Vector3(Mathf.Sign(movimientoX), 1, 1);
-            animator.SetBool("Correr", true);
         }
     }
 
@@ -73,7 +67,7 @@ public class Jugador : MonoBehaviour
         if (collision.transform.CompareTag("Fruta"))
         {
             FindObjectOfType<GameManager>().SumarPuntos();
-            audioSource.PlayOneShot(clipMoneda);
+            audioSource.PlayOneShot(clipFruta);
             Destroy(collision.gameObject);
         }
 
@@ -88,19 +82,5 @@ public class Jugador : MonoBehaviour
         }
     }
     
-}using UnityEngine;
-
-public class Jugador : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
+

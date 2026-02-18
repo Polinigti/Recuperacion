@@ -1,4 +1,5 @@
 using UnityEngine;
+//camara
 public class Camara : MonoBehaviour
 {
 
@@ -10,3 +11,5 @@ public class Camara : MonoBehaviour
     }
 
 }
+
+
