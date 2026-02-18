@@ -1,5 +1,95 @@
 using UnityEngine;
 
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+
+public class Jugador : MonoBehaviour
+{
+    [Header("Movimiento")]
+    private float movimientoX;
+    public float velocidad = 2;
+    private Rigidbody2D rb2d;
+
+    [Header("************ Salto ************")]
+    public float fuerzaSalto = 2;
+
+    [Header("******* CompruebaSuelo *******")]
+    private bool estaEnSuelo = false;
+    public LayerMask layerSuelo;
+    private float radioEsferaTocaSuelo = 0.1f;
+    public Transform compruebaSuelo;
+
+     [Header("******** Sonido ********")]
+    public AudioSource audioSource;
+    public AudioClip clipFruta;
+
+     [Header("******* Animaciones *******")]
+    private Animator animator;
+
+
+    void Start()
+    {
+        rb2d = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        
+        rb2d.linearVelocity = new Vector2(movimientoX * velocidad, rb2d.linearVelocity.y);
+        animator.SetBool("Correr", movimientoX != 0);
+
+    
+    }
+
+
+    void FixedUpdate()
+    {
+        estaEnSuelo = Physics2D.OverlapCircle(compruebaSuelo.position, radioEsferaTocaSuelo, layerSuelo);
+    }
+
+    private void OnMove(InputValue inputMovimiento)
+    {
+        movimientoX = inputMovimiento.Get<Vector2>().x;
+
+        if (movimientoX != 0)
+        {
+            transform.localScale = new Vector3(Mathf.Sign(movimientoX), 1, 1);
+            animator.SetBool("Correr", true);
+        }
+    }
+
+    private void OnJump(InputValue inputSalto)
+    {
+        if (estaEnSuelo)
+        {
+            rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x, fuerzaSalto);
+        
+        }
+    }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.CompareTag("Fruta"))
+        {
+            FindObjectOfType<GameManager>().SumarPuntos();
+            audioSource.PlayOneShot(clipMoneda);
+            Destroy(collision.gameObject);
+        }
+
+        if (collision.transform.CompareTag("Enemigo") || collision.transform.CompareTag("SueloMuerte"))
+        {
+            FindObjectOfType<GameManager>().QuitarVida();
+        }
+
+        if (collision.transform.CompareTag("Casa"))
+        {
+            SceneManager.LoadScene(2);
+        }
+    }
+    
+}using UnityEngine;
+
 public class Jugador : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created

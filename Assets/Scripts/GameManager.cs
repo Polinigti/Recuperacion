@@ -1,16 +1,44 @@
 using UnityEngine;
+using TMPro;
+//GameManager
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public TMP_Text textoPuntos;
+    private int puntos = 0;
+    private int vida;
+    public TMP_Text textoVidaValor;
+    public Jugador jugador;       
+    public GameObject puntoInicial;  
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        puntos = 0;
+        textoPuntos.text = "0";
+
+        vida = 2;
+        textoVidaValor.text = vida.ToString();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SumarPuntos()
     {
-        
+        puntos++;
+        textoPuntos.text = puntos.ToString();
     }
+
+     public void QuitarVida()
+    {
+        vida--;
+        textoVidaValor.text = vida.ToString();
+
+        jugador.transform.position = puntoInicial.transform.position;
+    
+        if (vida <= 0)
+        {
+            SceneManager.LoadScene(1);
+        }
+    }
+
 }
